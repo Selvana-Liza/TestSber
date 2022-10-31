@@ -1,0 +1,17 @@
+[
+  {
+    "idBook": 111,
+    "nameBook": "Book1",
+    "authorBook": "Author1"
+  },
+  {
+    "idBook": 222,
+    "nameBook": "Book2",
+    "authorBook": "Author2"
+  },
+  {
+    "idBook": 333,
+    "nameBook": "Book3",
+    "authorBook": "Author3"
+  }
+]

@@ -73,32 +73,32 @@ public class SimpleBookService implements BookService {
     }
 
     public void getPlace( List<ResponseDto> list){
-        list.forEach(dtoController ->
+        list.forEach(responseDto ->
         {
             int number = new Random().nextInt(4);
             switch (number) {
                 case 0: {
-                    dtoController.setPlace("Place1");
+                    responseDto.setPlace("Place1");
                     break;
                 }
                 case 1: {
-                    dtoController.setPlace("Place2");
+                    responseDto.setPlace("Place2");
                     break;
                 }
                 case 2: {
-                    dtoController.setPlace("Place3");
+                    responseDto.setPlace("Place3");
                     break;
                 }
                 default:
-                    dtoController.setPlace("none");
+                    responseDto.setPlace("none");
                     break;
             }
         });
     }
 
     public void getCount(List<BookDto> list) {
-        list.forEach(dtoRepository ->
-                dtoRepository.setCountBooks(new Random().nextInt(100)+1)
+        list.forEach(bookDto ->
+                bookDto.setCountBooks(new Random().nextInt(100)+1)
         );
     }
 }

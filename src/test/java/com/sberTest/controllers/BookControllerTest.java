@@ -1,17 +1,21 @@
 package com.sberTest.controllers;
 
-import com.sberTest.dto.dtoRepository;
-import com.sberTest.services.BookService;
+import com.sberTest.dto.BookDto;
+import com.sberTest.services.SimpleBookService;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
 @RequiredArgsConstructor
 class BookControllerTest {
-    private final BookService bookService;
+    @Autowired
+    private final SimpleBookService bookService;
+    @Autowired
     private final BookController bookController;
-    List<dtoRepository> allBooksR;
+
+    List<BookDto> allBooksR;
 
     @Test
     void getBookControllerTest() {

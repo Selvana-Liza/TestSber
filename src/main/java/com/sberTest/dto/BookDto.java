@@ -1,5 +1,6 @@
 package com.sberTest.dto;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -7,16 +8,16 @@ import lombok.experimental.Accessors;
 @Getter
 @Setter
 @Accessors(chain = true)
-public class dtoController {
+@Builder
+public class BookDto {
     int idBook;
     String nameBook;
     String authorBook;
     int countBooks;
-    String place;
 
     @Override
     public String toString() {
-        return "Book {" + "id= " + idBook + ", name= '" + nameBook + '\'' + ", author= " + authorBook
-                + ", count= " + countBooks + ", something='" + place +'}';
+        return "Book {" + "id= " + idBook + ", name= '" + nameBook + '\''
+                + ", author=" + authorBook + ", count= " + countBooks  +'}';
     }
 }

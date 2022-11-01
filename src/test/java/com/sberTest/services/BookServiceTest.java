@@ -3,41 +3,36 @@ package com.sberTest.services;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.sberTest.controllers.BookController;
-import com.sberTest.dto.dtoController;
-import com.sberTest.dto.dtoRepository;
+import com.sberTest.dto.BookDto;
+import com.sberTest.dto.ResponseDto;
 import com.sberTest.models.Book;
 import com.sberTest.repositories.BookRepository;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-
 //как подключить ApplicationContext???
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration("")
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor
 class BookServiceTest {
-    private final BookService bookService;
+    @Autowired
+    private final SimpleBookService bookService;
+    @Autowired
     private final BookRepository bookRepository;
+    @Autowired
     private final BookController bookController;
     List<Book> bookList;
-    List<dtoRepository> allBooksR;
+    List<BookDto> bookDtoList;
 
 
     void setUp() throws IOException {
@@ -48,7 +43,7 @@ class BookServiceTest {
     }
 
     @Test
-    void givenJson() throws IOException {
+    void givenJsonTest() throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/Book.json"));
         ObjectMapper objectMapper = new ObjectMapper();
         CollectionType listType = objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, Book.class);
@@ -59,36 +54,35 @@ class BookServiceTest {
     }
 
     @Test
-    void findDtoRepositoryTest() throws IOException {
-        set();
-        allBooksR = bookService.findDtoRepository();
+    void mappingToBookDTOTest() {
+        bookDtoList = bookService.mappingToBookDTO();
 
-        assertEquals(bookList.size(), allBooksR.size(), "allBooksR count is not matching");
-        allBooksR.forEach(bookR -> bookList.forEach(book -> {
-                    if (book.getIdBook() == bookR.getIdBook()) {
-                        assertEquals(book.getNameBook(), bookR.getNameBook(),"Name book is not matching");
-                        assertEquals(book.getAuthorBook(), bookR.getAuthorBook(), "Author book is not matching");
+        assertEquals(bookList.size(), bookDtoList.size(), "bookDtoList count is not matching");
+        bookDtoList.forEach(bookDto -> bookList.forEach(book -> {
+                    if (book.getIdBook() == bookDto.getIdBook()) {
+                        assertEquals(book.getNameBook(), bookDto.getNameBook(),"Name book is not matching");
+                        assertEquals(book.getAuthorBook(), bookDto.getAuthorBook(), "Author book is not matching");
                     }
                 }
         ));
     }
 
     @Test
-    void findDtoControllerTest() {
-        List<dtoController> allBookC = bookController.getBook(allBooksR);
+    void mappingToResponseDTOTest() {
+        List<ResponseDto> responseDtoList = bookController.getBook(bookDtoList);
 
-        assertEquals(allBooksR.size(), allBookC.size(), "allBookC count is not matching");
-        allBookC.forEach(bookC -> allBooksR.forEach(bookR -> {
-                    if (bookR.getIdBook() == bookC.getIdBook()) {
-                        assertEquals(bookR.getNameBook(), bookC.getNameBook(),"Name book is not matching");
-                        assertEquals(bookR.getAuthorBook(), bookC.getAuthorBook(), "Author book is not matching");
+        assertEquals(bookDtoList.size(), responseDtoList.size(), "responseDtoList count is not matching");
+        responseDtoList.forEach(responseDto -> bookDtoList.forEach(bookDto -> {
+                    if (bookDto.getIdBook() == responseDto.getIdBook()) {
+                        assertEquals(bookDto.getNameBook(), responseDto.getNameBook(),"Name book is not matching");
+                        assertEquals(bookDto.getAuthorBook(), responseDto.getAuthorBook(), "Author book is not matching");
                     }
                 }
         ));
     }
 
     @Test
-    void findAll() {
+    void findAllTest() {
         List<Book> all = bookRepository.findAll();
 
         assertEquals(3, all.size(), "Count books is not matching");
@@ -109,14 +103,49 @@ class BookServiceTest {
     }
 
     @Test
-    void saveAll() {
+    void saveAllTest() {
+        List<Book> books = new ArrayList<>(
+                Arrays.asList(
+                        new Book()
+                                .setIdBook(777)
+                                .setNameBook("Book777")
+                                .setAuthorBook("Author777"),
+                        new Book()
+                                .setIdBook(888)
+                                .setNameBook("Book888")
+                                .setAuthorBook("Author888"),
+                        new Book()
+                                .setIdBook(999)
+                                .setNameBook("Book999")
+                                .setAuthorBook("Author999")
+
+                )
+        );
+
+        List<Book> expectedBooks = bookService.findAll();
+
+        assertEquals(3, expectedBooks.size(), "Count books is not matching");
+
+        expectedBooks.forEach(book -> {
+            if (777 == book.getIdBook()) {
+                assertEquals("Book777", book.getNameBook());
+                assertEquals("Author777", book.getAuthorBook());
+            } else if (888 == book.getIdBook()) {
+                assertEquals("Book888", book.getNameBook());
+                assertEquals("Author888", book.getAuthorBook());
+            }
+            else if (999 == book.getIdBook()) {
+                assertEquals("Book999", book.getNameBook());
+                assertEquals("Author999", book.getAuthorBook());
+            }
+        });
     }
 
     @Test
-    void getPlace() {
+    void getPlaceTest() {
     }
 
     @Test
-    void getCount() {
+    void getCountTest() {
     }
 }

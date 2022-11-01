@@ -1,8 +1,8 @@
 package com.sberTest.controllers;
 
-import com.sberTest.dto.dtoController;
-import com.sberTest.dto.dtoRepository;
-import com.sberTest.services.BookService;
+import com.sberTest.dto.ResponseDto;
+import com.sberTest.dto.BookDto;
+import com.sberTest.services.SimpleBookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 
@@ -16,9 +16,9 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 public class BookController {
-    private final BookService bookService;
+    private final SimpleBookService bookService;
 
-    public List<dtoController> getBook(List<dtoRepository> dtoRep){
-        return bookService.findDtoController(dtoRep);
+    public List<ResponseDto> getBook(List<BookDto> dtoRep){
+        return bookService.mappingToResponseDto(dtoRep);
     }
 }

@@ -46,8 +46,8 @@ public class SimpleBookService implements BookService {
                 .collect(Collectors.toList());
     }
 
-    public List<ResponseDto> mappingToResponseDto(List<BookDto> dtoRep){
-        return dtoRep.stream()
+    public List<ResponseDto> mappingToResponseDto(List<BookDto> bookDtoList){
+        return bookDtoList.stream()
                 .map(mappingUtils::mapToResponseDto)
                 .collect(Collectors.toList());
     }

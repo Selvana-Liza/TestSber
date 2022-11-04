@@ -18,7 +18,7 @@ import java.util.List;
 public class BookController {
     private final SimpleBookService bookService;
 
-    public List<ResponseDto> getBook(List<BookDto> dtoRep){
-        return bookService.mappingToResponseDto(dtoRep);
+    public List<ResponseDto> getBook(List<BookDto> bookDtoList){
+        return bookService.mappingToResponseDto(bookDtoList);
     }
 }

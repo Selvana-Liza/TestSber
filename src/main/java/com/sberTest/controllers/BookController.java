@@ -8,7 +8,6 @@ import org.springframework.stereotype.Controller;
 
 import java.util.List;
 
-//не уверена в функции контроллера
 //1.      Слой контроллеров. Требование к контроллеру:
 //        a.      Контроллер, в качестве ответа, принимает собственное ДТО
 //        b.      Контроллер работает только со слоем бизнес логики
@@ -18,7 +17,7 @@ import java.util.List;
 public class BookController {
     private final SimpleBookService bookService;
 
-    public List<ResponseDto> getBook(List<BookDto> bookDtoList){
-        return bookService.mappingToResponseDto(bookDtoList);
+    public List<ResponseDto> getResponseDtoList(List<BookDto> bookDtoList){
+        return bookService.convertToResponseDtoList(bookDtoList);
     }
 }

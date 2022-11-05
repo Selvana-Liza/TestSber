@@ -1,10 +1,9 @@
-package com.sberTest.utils;
+package com.sberTest.services;
 
 import com.sberTest.controllers.BookController;
 import com.sberTest.dto.BookDto;
 import com.sberTest.dto.ResponseDto;
 import com.sberTest.models.Book;
-import com.sberTest.services.SimpleBookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;
@@ -13,19 +12,15 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class InitiateUtils implements CommandLineRunner {
+public class InitiateService implements CommandLineRunner {
     private final SimpleBookService bookService;
     private final BookController bookController;
 
     @Override
     public void run(String... args) throws Exception {
-        List<Book> bookJsonList = bookService.givesJson();
+        final List<Book> booksList = bookService.getBooksFromJson();
 
-        for(Book bookJson : bookJsonList) {
-            Book book = new Book()
-                    .setIdBook(bookJson.getIdBook())
-                    .setNameBook(bookJson.getNameBook())
-                    .setAuthorBook(bookJson.getAuthorBook());
+        for (Book book : booksList) {
             bookService.save(book);
         }
 
@@ -35,22 +30,21 @@ public class InitiateUtils implements CommandLineRunner {
         }
         System.out.println();
 
-        List<BookDto> allBooksDto = bookService.mappingToBookDTO();
+        final List<BookDto> allBooksDto = bookService.findAllBooksDTO();
         bookService.getCount(allBooksDto);
 
         System.out.println("Книги ДТО репозитория");
-        for (BookDto book : allBooksDto) {
-            System.out.println(book);
+        for (BookDto bookDto : allBooksDto) {
+            System.out.println(bookDto);
         }
         System.out.println();
 
-
-        List<ResponseDto> allBooksResponse = bookController.getBook(allBooksDto);
-        bookService.getPlace(allBooksResponse);
+        final List<ResponseDto> allBooksResponseDto = bookController.getResponseDtoList(allBooksDto);
+        bookService.getPlace(allBooksResponseDto);
 
         System.out.println("Книги ДТО контроллера");
-        for (ResponseDto book : allBooksResponse) {
-            System.out.println(book);
+        for (ResponseDto responseDto : allBooksResponseDto) {
+            System.out.println(responseDto);
         }
     }
 }

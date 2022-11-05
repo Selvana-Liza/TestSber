@@ -10,10 +10,10 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @Builder
 public class BookDto {
-    int idBook;
-    String nameBook;
-    String authorBook;
-    int countBooks;
+    private int idBook;
+    private String nameBook;
+    private String authorBook;
+    private int countBooks;
 
     @Override
     public String toString() {

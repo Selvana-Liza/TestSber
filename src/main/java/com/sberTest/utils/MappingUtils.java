@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MappingUtils {
     //из Book в BookDto
-    public BookDto mapToBookDto(Book book) {
+    public static BookDto mapToBookDto(Book book) {
         return BookDto.builder()
                 .idBook(book.getIdBook())
                 .nameBook(book.getNameBook())
@@ -18,7 +18,7 @@ public class MappingUtils {
     }
 
     //из BookDto в ResponseDto
-    public ResponseDto mapToResponseDto(BookDto bookDto) {
+    public static ResponseDto mapToResponseDto(BookDto bookDto) {
         return ResponseDto.builder()
                 .idBook(bookDto.getIdBook())
                 .nameBook(bookDto.getNameBook())

@@ -10,15 +10,15 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @Builder
 public class ResponseDto {
-    int idBook;
-    String nameBook;
-    String authorBook;
-    int countBooks;
-    String place;
+    private int idBook;
+    private String nameBook;
+    private String authorBook;
+    private int countBooks;
+    private String place;
 
     @Override
     public String toString() {
         return "Book {" + "id= " + idBook + ", name= '" + nameBook + '\'' + ", author= " + authorBook
-                + ", count= " + countBooks + ", something='" + place +'}';
+                + ", count= " + countBooks + ", place='" + place +'}';
     }
 }

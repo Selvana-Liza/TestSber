@@ -2,11 +2,12 @@ package com.sberTest.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
-import com.sberTest.dto.ResponseDto;
 import com.sberTest.dto.BookDto;
+import com.sberTest.dto.ResponseDto;
 import com.sberTest.models.Book;
 import com.sberTest.repositories.BookRepository;
 import com.sberTest.utils.MappingUtils;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -29,36 +30,36 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SimpleBookService implements BookService {
     private final BookRepository bookRepository;
-    private final MappingUtils mappingUtils;
 
     @Override
-    public List<Book> givesJson() throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/Book.json"));
-        ObjectMapper objectMapper = new ObjectMapper();
-        CollectionType listType = objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, Book.class);
-        List<Book> bookList = objectMapper.readValue(reader, listType);
-        return bookList;
+    public List<Book> getBooksFromJson() throws IOException {
+        try (BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/Book.json"))) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            CollectionType listType = objectMapper.getTypeFactory()
+                    .constructCollectionType(ArrayList.class, Book.class);
+            return objectMapper.readValue(reader, listType);
+        }
     }
 
-    public List<BookDto> mappingToBookDTO() {
+    public List<BookDto> findAllBooksDTO() {
         return bookRepository.findAll().stream()
-                .map(mappingUtils::mapToBookDto)
+                .map(MappingUtils::mapToBookDto)
                 .collect(Collectors.toList());
     }
 
-    public List<ResponseDto> mappingToResponseDto(List<BookDto> bookDtoList){
+    public List<ResponseDto> convertToResponseDtoList(List<BookDto> bookDtoList) {
         return bookDtoList.stream()
-                .map(mappingUtils::mapToResponseDto)
+                .map(MappingUtils::mapToResponseDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<Book> findAll(){
+    public List<Book> findAll() {
         return bookRepository.findAll();
     }
 
     @Override
-    public Optional<Book> findById(int id){
+    public Optional<Book> findById(int id) {
         return bookRepository.findById(id);
     }
 
@@ -72,11 +73,9 @@ public class SimpleBookService implements BookService {
         bookRepository.saveAll(books);
     }
 
-    public void getPlace( List<ResponseDto> list){
-        list.forEach(responseDto ->
-        {
-            int number = new Random().nextInt(4);
-            switch (number) {
+    public void getPlace(@NonNull List<ResponseDto> list) {
+        list.forEach(responseDto -> {
+            switch (new Random().nextInt(4)) {
                 case 0: {
                     responseDto.setPlace("Place1");
                     break;
@@ -91,14 +90,13 @@ public class SimpleBookService implements BookService {
                 }
                 default:
                     responseDto.setPlace("none");
-                    break;
             }
         });
     }
 
-    public void getCount(List<BookDto> list) {
+    public void getCount(@NonNull List<BookDto> list) {
         list.forEach(bookDto ->
-                bookDto.setCountBooks(new Random().nextInt(100)+1)
+                bookDto.setCountBooks(new Random().nextInt(100) + 1)
         );
     }
 }

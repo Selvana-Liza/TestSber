@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BookService {
-    List<Book> givesJson() throws IOException;
+    List<Book> getBooksFromJson() throws IOException;
     List<Book> findAll();
     Optional<Book> findById(int id);
     void save(Book book);
